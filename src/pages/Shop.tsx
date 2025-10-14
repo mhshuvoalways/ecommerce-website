@@ -32,6 +32,7 @@ const Shop = () => {
         image: product.image_url || placeholderImages[index % placeholderImages.length],
         name: product.name,
         price: Number(product.price),
+        categoryId: product.category_id,
         category: product.categories?.name?.toLowerCase() || "uncategorized",
       }));
     },
@@ -53,7 +54,7 @@ const Shop = () => {
   const filteredProducts = products.filter((product) => {
     const categoryMatch =
       selectedCategories.length === 0 ||
-      selectedCategories.includes(product.category);
+      (product.categoryId && selectedCategories.includes(product.categoryId));
     const priceMatch =
       product.price >= priceRange[0] && product.price <= priceRange[1];
     const ratingMatch = minRating === 0;

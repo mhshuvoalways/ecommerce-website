@@ -2,6 +2,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Star } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 interface ShopFiltersProps {
   selectedCategories: string[];
@@ -12,13 +14,6 @@ interface ShopFiltersProps {
   onRatingChange: (rating: number) => void;
 }
 
-const categories = [
-  { id: "furniture", label: "Furniture" },
-  { id: "decor", label: "Decor" },
-  { id: "lighting", label: "Lighting" },
-  { id: "textiles", label: "Textiles" },
-];
-
 const ShopFilters = ({
   selectedCategories,
   onCategoryChange,
@@ -27,6 +22,18 @@ const ShopFilters = ({
   minRating,
   onRatingChange,
 }: ShopFiltersProps) => {
+  const { data: categories, isLoading } = useQuery({
+    queryKey: ["categories"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("categories")
+        .select("id, name")
+        .eq("status", "Active");
+      if (error) throw error;
+      return data;
+    },
+  });
+
   return (
     <aside className="w-full space-y-8 rounded-lg border bg-card p-6 shadow-sm lg:w-64">
       <div>
@@ -37,21 +44,27 @@ const ShopFilters = ({
         <h4 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
           Category
         </h4>
-        {categories.map((category) => (
-          <div key={category.id} className="flex items-center space-x-2">
-            <Checkbox
-              id={category.id}
-              checked={selectedCategories.includes(category.id)}
-              onCheckedChange={() => onCategoryChange(category.id)}
-            />
-            <Label
-              htmlFor={category.id}
-              className="cursor-pointer text-sm font-normal"
-            >
-              {category.label}
-            </Label>
-          </div>
-        ))}
+        {isLoading ? (
+          <p className="text-sm text-muted-foreground">Loading categories...</p>
+        ) : categories && categories.length > 0 ? (
+          categories.map((category) => (
+            <div key={category.id} className="flex items-center space-x-2">
+              <Checkbox
+                id={category.id}
+                checked={selectedCategories.includes(category.id)}
+                onCheckedChange={() => onCategoryChange(category.id)}
+              />
+              <Label
+                htmlFor={category.id}
+                className="cursor-pointer text-sm font-normal"
+              >
+                {category.name}
+              </Label>
+            </div>
+          ))
+        ) : (
+          <p className="text-sm text-muted-foreground">No categories available</p>
+        )}
       </div>
 
       <div className="space-y-4">

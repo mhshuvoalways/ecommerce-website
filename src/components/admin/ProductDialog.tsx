@@ -40,6 +40,7 @@ export function ProductDialog({ open, onOpenChange, product }: ProductDialogProp
   const [categoryId, setCategoryId] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string>("");
   const [isUploading, setIsUploading] = useState(false);
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -65,6 +66,7 @@ export function ProductDialog({ open, onOpenChange, product }: ProductDialogProp
       setStatus(product.status || "Active");
       setCategoryId(product.category_id || "");
       setImageUrl(product.image_url || "");
+      setImagePreview(product.image_url || "");
       setImageFile(null);
     } else {
       setName("");
@@ -74,6 +76,7 @@ export function ProductDialog({ open, onOpenChange, product }: ProductDialogProp
       setStatus("Active");
       setCategoryId("");
       setImageUrl("");
+      setImagePreview("");
       setImageFile(null);
     }
   }, [product, open]);
@@ -232,7 +235,7 @@ export function ProductDialog({ open, onOpenChange, product }: ProductDialogProp
               </Select>
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="imageFile">Upload Image</Label>
+              <Label htmlFor="imageFile">Product Image</Label>
               <Input
                 id="imageFile"
                 type="file"
@@ -241,28 +244,24 @@ export function ProductDialog({ open, onOpenChange, product }: ProductDialogProp
                   const file = e.target.files?.[0];
                   if (file) {
                     setImageFile(file);
-                    setImageUrl(""); // Clear URL if file is selected
+                    // Create preview
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                      setImagePreview(reader.result as string);
+                    };
+                    reader.readAsDataURL(file);
                   }
                 }}
               />
-              {imageFile && (
-                <p className="text-sm text-muted-foreground">
-                  Selected: {imageFile.name}
-                </p>
+              {imagePreview && (
+                <div className="mt-2">
+                  <img
+                    src={imagePreview}
+                    alt="Preview"
+                    className="h-32 w-32 object-cover rounded-md border"
+                  />
+                </div>
               )}
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="imageUrl">Or Image URL</Label>
-              <Input
-                id="imageUrl"
-                value={imageUrl}
-                onChange={(e) => {
-                  setImageUrl(e.target.value);
-                  setImageFile(null); // Clear file if URL is entered
-                }}
-                placeholder="https://example.com/image.jpg"
-                disabled={!!imageFile}
-              />
             </div>
             <div className="grid gap-2">
               <Label htmlFor="status">Status</Label>
