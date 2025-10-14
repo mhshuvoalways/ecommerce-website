@@ -39,6 +39,8 @@ export function ProductDialog({ open, onOpenChange, product }: ProductDialogProp
   const [status, setStatus] = useState("Active");
   const [categoryId, setCategoryId] = useState("");
   const [imageUrl, setImageUrl] = useState("");
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -63,6 +65,7 @@ export function ProductDialog({ open, onOpenChange, product }: ProductDialogProp
       setStatus(product.status || "Active");
       setCategoryId(product.category_id || "");
       setImageUrl(product.image_url || "");
+      setImageFile(null);
     } else {
       setName("");
       setDescription("");
@@ -71,11 +74,39 @@ export function ProductDialog({ open, onOpenChange, product }: ProductDialogProp
       setStatus("Active");
       setCategoryId("");
       setImageUrl("");
+      setImageFile(null);
     }
   }, [product, open]);
 
   const mutation = useMutation({
     mutationFn: async () => {
+      let finalImageUrl = imageUrl;
+
+      // Upload image file if selected
+      if (imageFile) {
+        setIsUploading(true);
+        const fileExt = imageFile.name.split('.').pop();
+        const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
+        const filePath = `${fileName}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from('product-images')
+          .upload(filePath, imageFile, {
+            cacheControl: '3600',
+            upsert: false
+          });
+
+        if (uploadError) throw uploadError;
+
+        // Get public URL
+        const { data: { publicUrl } } = supabase.storage
+          .from('product-images')
+          .getPublicUrl(filePath);
+
+        finalImageUrl = publicUrl;
+        setIsUploading(false);
+      }
+
       const productData = {
         name,
         description: description || null,
@@ -83,7 +114,7 @@ export function ProductDialog({ open, onOpenChange, product }: ProductDialogProp
         stock: parseInt(stock),
         status,
         category_id: categoryId || null,
-        image_url: imageUrl || null,
+        image_url: finalImageUrl || null,
       };
 
       if (product) {
@@ -201,12 +232,36 @@ export function ProductDialog({ open, onOpenChange, product }: ProductDialogProp
               </Select>
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="imageUrl">Image URL</Label>
+              <Label htmlFor="imageFile">Upload Image</Label>
+              <Input
+                id="imageFile"
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    setImageFile(file);
+                    setImageUrl(""); // Clear URL if file is selected
+                  }
+                }}
+              />
+              {imageFile && (
+                <p className="text-sm text-muted-foreground">
+                  Selected: {imageFile.name}
+                </p>
+              )}
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="imageUrl">Or Image URL</Label>
               <Input
                 id="imageUrl"
                 value={imageUrl}
-                onChange={(e) => setImageUrl(e.target.value)}
+                onChange={(e) => {
+                  setImageUrl(e.target.value);
+                  setImageFile(null); // Clear file if URL is entered
+                }}
                 placeholder="https://example.com/image.jpg"
+                disabled={!!imageFile}
               />
             </div>
             <div className="grid gap-2">
@@ -226,8 +281,8 @@ export function ProductDialog({ open, onOpenChange, product }: ProductDialogProp
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
               Cancel
             </Button>
-            <Button type="submit" disabled={mutation.isPending}>
-              {mutation.isPending ? "Saving..." : "Save"}
+            <Button type="submit" disabled={mutation.isPending || isUploading}>
+              {isUploading ? "Uploading..." : mutation.isPending ? "Saving..." : "Save"}
             </Button>
           </DialogFooter>
         </form>
