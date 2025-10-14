@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -28,6 +29,7 @@ interface ProductDialogProps {
     status: string;
     category_id: string | null;
     image_url: string | null;
+    is_featured: boolean | null;
   };
 }
 
@@ -38,6 +40,7 @@ export function ProductDialog({ open, onOpenChange, product }: ProductDialogProp
   const [stock, setStock] = useState("");
   const [status, setStatus] = useState("Active");
   const [categoryId, setCategoryId] = useState("");
+  const [isFeatured, setIsFeatured] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string>("");
@@ -65,6 +68,7 @@ export function ProductDialog({ open, onOpenChange, product }: ProductDialogProp
       setStock(product.stock?.toString() || "0");
       setStatus(product.status || "Active");
       setCategoryId(product.category_id || "");
+      setIsFeatured(product.is_featured || false);
       setImageUrl(product.image_url || "");
       setImagePreview(product.image_url || "");
       setImageFile(null);
@@ -75,6 +79,7 @@ export function ProductDialog({ open, onOpenChange, product }: ProductDialogProp
       setStock("");
       setStatus("Active");
       setCategoryId("");
+      setIsFeatured(false);
       setImageUrl("");
       setImagePreview("");
       setImageFile(null);
@@ -118,6 +123,7 @@ export function ProductDialog({ open, onOpenChange, product }: ProductDialogProp
         status,
         category_id: categoryId || null,
         image_url: finalImageUrl || null,
+        is_featured: isFeatured,
       };
 
       if (product) {
@@ -274,6 +280,19 @@ export function ProductDialog({ open, onOpenChange, product }: ProductDialogProp
                   <SelectItem value="Inactive">Inactive</SelectItem>
                 </SelectContent>
               </Select>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="isFeatured"
+                checked={isFeatured}
+                onCheckedChange={(checked) => setIsFeatured(checked as boolean)}
+              />
+              <Label
+                htmlFor="isFeatured"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+                Featured Product (Show on Home Page)
+              </Label>
             </div>
           </div>
           <DialogFooter>
