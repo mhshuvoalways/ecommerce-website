@@ -8,6 +8,15 @@ import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 const Cart = () => {
   const { items, updateQuantity, removeFromCart, totalPrice, clearCart } = useCart();
@@ -15,8 +24,17 @@ const Cart = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const [isProcessing, setIsProcessing] = useState(false);
+  const [showCheckoutDialog, setShowCheckoutDialog] = useState(false);
+  const [shippingInfo, setShippingInfo] = useState({
+    name: "",
+    address: "",
+    city: "",
+    state: "",
+    zip: "",
+    phone: "",
+  });
 
-  const handleCheckout = async () => {
+  const handleCheckoutClick = () => {
     if (!user) {
       toast({
         title: "Authentication Required",
@@ -36,6 +54,21 @@ const Cart = () => {
       return;
     }
 
+    setShowCheckoutDialog(true);
+  };
+
+  const handlePlaceOrder = async () => {
+    // Validate shipping info
+    if (!shippingInfo.name || !shippingInfo.address || !shippingInfo.city || 
+        !shippingInfo.state || !shippingInfo.zip || !shippingInfo.phone) {
+      toast({
+        title: "Missing Information",
+        description: "Please fill in all shipping details",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsProcessing(true);
 
     try {
@@ -47,6 +80,12 @@ const Cart = () => {
           customer_email: user.email,
           total: totalPrice,
           status: "Pending",
+          shipping_name: shippingInfo.name,
+          shipping_address: shippingInfo.address,
+          shipping_city: shippingInfo.city,
+          shipping_state: shippingInfo.state,
+          shipping_zip: shippingInfo.zip,
+          shipping_phone: shippingInfo.phone,
         })
         .select()
         .single();
@@ -67,8 +106,9 @@ const Cart = () => {
 
       if (itemsError) throw itemsError;
 
-      // Clear cart
+      // Clear cart and close dialog
       clearCart();
+      setShowCheckoutDialog(false);
 
       toast({
         title: "Order Placed Successfully!",
@@ -201,10 +241,9 @@ const Cart = () => {
                 </div>
                 <Button 
                   className="mt-6 w-full" 
-                  onClick={handleCheckout}
-                  disabled={isProcessing}
+                  onClick={handleCheckoutClick}
                 >
-                  {isProcessing ? "Processing..." : "Proceed to Checkout (Cash on Delivery)"}
+                  Proceed to Checkout (Cash on Delivery)
                 </Button>
                 <Button variant="outline" className="mt-2 w-full" asChild>
                   <Link to="/shop">Continue Shopping</Link>
@@ -215,6 +254,83 @@ const Cart = () => {
         </div>
       </main>
       <Footer />
+
+      <Dialog open={showCheckoutDialog} onOpenChange={setShowCheckoutDialog}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>Shipping Information</DialogTitle>
+            <DialogDescription>
+              Please provide your shipping address for delivery
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <Label htmlFor="name">Full Name</Label>
+              <Input
+                id="name"
+                value={shippingInfo.name}
+                onChange={(e) => setShippingInfo({ ...shippingInfo, name: e.target.value })}
+                placeholder="John Doe"
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="phone">Phone Number</Label>
+              <Input
+                id="phone"
+                value={shippingInfo.phone}
+                onChange={(e) => setShippingInfo({ ...shippingInfo, phone: e.target.value })}
+                placeholder="+1 (555) 000-0000"
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="address">Street Address</Label>
+              <Input
+                id="address"
+                value={shippingInfo.address}
+                onChange={(e) => setShippingInfo({ ...shippingInfo, address: e.target.value })}
+                placeholder="123 Main St, Apt 4B"
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="city">City</Label>
+                <Input
+                  id="city"
+                  value={shippingInfo.city}
+                  onChange={(e) => setShippingInfo({ ...shippingInfo, city: e.target.value })}
+                  placeholder="New York"
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="state">State</Label>
+                <Input
+                  id="state"
+                  value={shippingInfo.state}
+                  onChange={(e) => setShippingInfo({ ...shippingInfo, state: e.target.value })}
+                  placeholder="NY"
+                />
+              </div>
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="zip">ZIP Code</Label>
+              <Input
+                id="zip"
+                value={shippingInfo.zip}
+                onChange={(e) => setShippingInfo({ ...shippingInfo, zip: e.target.value })}
+                placeholder="10001"
+              />
+            </div>
+          </div>
+          <div className="flex flex-col gap-2">
+            <Button onClick={handlePlaceOrder} disabled={isProcessing}>
+              {isProcessing ? "Processing..." : `Place Order - $${totalPrice.toFixed(2)}`}
+            </Button>
+            <Button variant="outline" onClick={() => setShowCheckoutDialog(false)}>
+              Cancel
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

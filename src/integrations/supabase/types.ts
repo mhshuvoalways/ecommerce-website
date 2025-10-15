@@ -82,6 +82,12 @@ export type Database = {
           created_at: string | null
           customer_email: string | null
           id: string
+          shipping_address: string | null
+          shipping_city: string | null
+          shipping_name: string | null
+          shipping_phone: string | null
+          shipping_state: string | null
+          shipping_zip: string | null
           status: string | null
           total: number
           user_id: string
@@ -90,6 +96,12 @@ export type Database = {
           created_at?: string | null
           customer_email?: string | null
           id?: string
+          shipping_address?: string | null
+          shipping_city?: string | null
+          shipping_name?: string | null
+          shipping_phone?: string | null
+          shipping_state?: string | null
+          shipping_zip?: string | null
           status?: string | null
           total: number
           user_id: string
@@ -98,6 +110,12 @@ export type Database = {
           created_at?: string | null
           customer_email?: string | null
           id?: string
+          shipping_address?: string | null
+          shipping_city?: string | null
+          shipping_name?: string | null
+          shipping_phone?: string | null
+          shipping_state?: string | null
+          shipping_zip?: string | null
           status?: string | null
           total?: number
           user_id?: string
