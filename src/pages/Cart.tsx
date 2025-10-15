@@ -10,13 +10,6 @@ import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 
 const Cart = () => {
   const { items, updateQuantity, removeFromCart, totalPrice, clearCart } = useCart();
@@ -24,7 +17,6 @@ const Cart = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const [isProcessing, setIsProcessing] = useState(false);
-  const [showCheckoutDialog, setShowCheckoutDialog] = useState(false);
   const [shippingInfo, setShippingInfo] = useState({
     name: "",
     address: "",
@@ -34,7 +26,7 @@ const Cart = () => {
     phone: "",
   });
 
-  const handleCheckoutClick = () => {
+  const handlePlaceOrder = async () => {
     if (!user) {
       toast({
         title: "Authentication Required",
@@ -45,19 +37,6 @@ const Cart = () => {
       return;
     }
 
-    if (items.length === 0) {
-      toast({
-        title: "Cart is empty",
-        description: "Add some items to your cart first",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    setShowCheckoutDialog(true);
-  };
-
-  const handlePlaceOrder = async () => {
     // Validate shipping info
     if (!shippingInfo.name || !shippingInfo.address || !shippingInfo.city || 
         !shippingInfo.state || !shippingInfo.zip || !shippingInfo.phone) {
@@ -106,9 +85,8 @@ const Cart = () => {
 
       if (itemsError) throw itemsError;
 
-      // Clear cart and close dialog
+      // Clear cart
       clearCart();
-      setShowCheckoutDialog(false);
 
       toast({
         title: "Order Placed Successfully!",
@@ -165,63 +143,132 @@ const Cart = () => {
 
         <div className="container mx-auto px-4 py-12 md:px-6">
           <div className="grid gap-8 lg:grid-cols-3">
-            <div className="lg:col-span-2 space-y-4">
-              {items.map((item) => (
-                <div
-                  key={item.id}
-                  className="flex gap-4 rounded-lg border p-4 shadow-sm"
-                >
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    className="h-24 w-24 rounded-md object-cover"
-                  />
-                  <div className="flex flex-1 flex-col justify-between">
-                    <div>
-                      <h3 className="font-semibold">{item.name}</h3>
-                      <p className="text-sm text-muted-foreground">
-                        ${item.price}
-                      </p>
+            {/* Shipping Information - Left Side */}
+            <div className="lg:col-span-1">
+              <div className="rounded-lg border p-6 shadow-sm">
+                <h2 className="mb-4 text-xl font-bold">Shipping Information</h2>
+                <div className="grid gap-4">
+                  <div className="grid gap-2">
+                    <Label htmlFor="name">Full Name</Label>
+                    <Input
+                      id="name"
+                      value={shippingInfo.name}
+                      onChange={(e) => setShippingInfo({ ...shippingInfo, name: e.target.value })}
+                      placeholder="John Doe"
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="phone">Phone Number</Label>
+                    <Input
+                      id="phone"
+                      value={shippingInfo.phone}
+                      onChange={(e) => setShippingInfo({ ...shippingInfo, phone: e.target.value })}
+                      placeholder="+1 (555) 000-0000"
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="address">Street Address</Label>
+                    <Input
+                      id="address"
+                      value={shippingInfo.address}
+                      onChange={(e) => setShippingInfo({ ...shippingInfo, address: e.target.value })}
+                      placeholder="123 Main St, Apt 4B"
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="grid gap-2">
+                      <Label htmlFor="city">City</Label>
+                      <Input
+                        id="city"
+                        value={shippingInfo.city}
+                        onChange={(e) => setShippingInfo({ ...shippingInfo, city: e.target.value })}
+                        placeholder="New York"
+                      />
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        onClick={() =>
-                          updateQuantity(item.id, item.quantity - 1)
-                        }
-                      >
-                        <Minus className="h-4 w-4" />
-                      </Button>
-                      <span className="w-8 text-center">{item.quantity}</span>
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        onClick={() =>
-                          updateQuantity(item.id, item.quantity + 1)
-                        }
-                      >
-                        <Plus className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => removeFromCart(item.id)}
-                        className="ml-auto"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
+                    <div className="grid gap-2">
+                      <Label htmlFor="state">State</Label>
+                      <Input
+                        id="state"
+                        value={shippingInfo.state}
+                        onChange={(e) => setShippingInfo({ ...shippingInfo, state: e.target.value })}
+                        placeholder="NY"
+                      />
                     </div>
                   </div>
-                  <div className="text-right font-semibold">
-                    ${(item.price * item.quantity).toFixed(2)}
+                  <div className="grid gap-2">
+                    <Label htmlFor="zip">ZIP Code</Label>
+                    <Input
+                      id="zip"
+                      value={shippingInfo.zip}
+                      onChange={(e) => setShippingInfo({ ...shippingInfo, zip: e.target.value })}
+                      placeholder="10001"
+                    />
                   </div>
                 </div>
-              ))}
+              </div>
             </div>
 
-            <div className="lg:col-span-1">
-              <div className="sticky top-24 rounded-lg border p-6 shadow-sm">
+            {/* Cart Items and Order Summary - Right Side */}
+            <div className="lg:col-span-2 space-y-6">
+              {/* Cart Items */}
+              <div className="space-y-4">
+                <h2 className="text-xl font-bold">Cart Items</h2>
+                {items.map((item) => (
+                  <div
+                    key={item.id}
+                    className="flex gap-4 rounded-lg border p-4 shadow-sm"
+                  >
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      className="h-24 w-24 rounded-md object-cover"
+                    />
+                    <div className="flex flex-1 flex-col justify-between">
+                      <div>
+                        <h3 className="font-semibold">{item.name}</h3>
+                        <p className="text-sm text-muted-foreground">
+                          ${item.price}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          onClick={() =>
+                            updateQuantity(item.id, item.quantity - 1)
+                          }
+                        >
+                          <Minus className="h-4 w-4" />
+                        </Button>
+                        <span className="w-8 text-center">{item.quantity}</span>
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          onClick={() =>
+                            updateQuantity(item.id, item.quantity + 1)
+                          }
+                        >
+                          <Plus className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => removeFromCart(item.id)}
+                          className="ml-auto"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                    <div className="text-right font-semibold">
+                      ${(item.price * item.quantity).toFixed(2)}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Order Summary */}
+              <div className="rounded-lg border p-6 shadow-sm">
                 <h2 className="mb-4 text-xl font-bold">Order Summary</h2>
                 <div className="space-y-2">
                   <div className="flex justify-between">
@@ -241,9 +288,10 @@ const Cart = () => {
                 </div>
                 <Button 
                   className="mt-6 w-full" 
-                  onClick={handleCheckoutClick}
+                  onClick={handlePlaceOrder}
+                  disabled={isProcessing}
                 >
-                  Proceed to Checkout (Cash on Delivery)
+                  {isProcessing ? "Processing..." : "Place Order (Cash on Delivery)"}
                 </Button>
                 <Button variant="outline" className="mt-2 w-full" asChild>
                   <Link to="/shop">Continue Shopping</Link>
@@ -254,83 +302,6 @@ const Cart = () => {
         </div>
       </main>
       <Footer />
-
-      <Dialog open={showCheckoutDialog} onOpenChange={setShowCheckoutDialog}>
-        <DialogContent className="sm:max-w-[500px]">
-          <DialogHeader>
-            <DialogTitle>Shipping Information</DialogTitle>
-            <DialogDescription>
-              Please provide your shipping address for delivery
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid gap-2">
-              <Label htmlFor="name">Full Name</Label>
-              <Input
-                id="name"
-                value={shippingInfo.name}
-                onChange={(e) => setShippingInfo({ ...shippingInfo, name: e.target.value })}
-                placeholder="John Doe"
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="phone">Phone Number</Label>
-              <Input
-                id="phone"
-                value={shippingInfo.phone}
-                onChange={(e) => setShippingInfo({ ...shippingInfo, phone: e.target.value })}
-                placeholder="+1 (555) 000-0000"
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="address">Street Address</Label>
-              <Input
-                id="address"
-                value={shippingInfo.address}
-                onChange={(e) => setShippingInfo({ ...shippingInfo, address: e.target.value })}
-                placeholder="123 Main St, Apt 4B"
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="grid gap-2">
-                <Label htmlFor="city">City</Label>
-                <Input
-                  id="city"
-                  value={shippingInfo.city}
-                  onChange={(e) => setShippingInfo({ ...shippingInfo, city: e.target.value })}
-                  placeholder="New York"
-                />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="state">State</Label>
-                <Input
-                  id="state"
-                  value={shippingInfo.state}
-                  onChange={(e) => setShippingInfo({ ...shippingInfo, state: e.target.value })}
-                  placeholder="NY"
-                />
-              </div>
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="zip">ZIP Code</Label>
-              <Input
-                id="zip"
-                value={shippingInfo.zip}
-                onChange={(e) => setShippingInfo({ ...shippingInfo, zip: e.target.value })}
-                placeholder="10001"
-              />
-            </div>
-          </div>
-          <div className="flex flex-col gap-2">
-            <Button onClick={handlePlaceOrder} disabled={isProcessing}>
-              {isProcessing ? "Processing..." : `Place Order - $${totalPrice.toFixed(2)}`}
-            </Button>
-            <Button variant="outline" onClick={() => setShowCheckoutDialog(false)}>
-              Cancel
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 };
