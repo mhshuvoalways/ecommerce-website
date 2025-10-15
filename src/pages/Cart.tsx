@@ -3,10 +3,90 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Minus, Plus, Trash2 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import { useState } from "react";
 
 const Cart = () => {
-  const { items, updateQuantity, removeFromCart, totalPrice } = useCart();
+  const { items, updateQuantity, removeFromCart, totalPrice, clearCart } = useCart();
+  const { user } = useAuth();
+  const { toast } = useToast();
+  const navigate = useNavigate();
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const handleCheckout = async () => {
+    if (!user) {
+      toast({
+        title: "Authentication Required",
+        description: "Please login to place an order",
+        variant: "destructive",
+      });
+      navigate("/auth");
+      return;
+    }
+
+    if (items.length === 0) {
+      toast({
+        title: "Cart is empty",
+        description: "Add some items to your cart first",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsProcessing(true);
+
+    try {
+      // Create order
+      const { data: order, error: orderError } = await supabase
+        .from("orders")
+        .insert({
+          user_id: user.id,
+          customer_email: user.email,
+          total: totalPrice,
+          status: "Pending",
+        })
+        .select()
+        .single();
+
+      if (orderError) throw orderError;
+
+      // Create order items
+      const orderItems = items.map((item) => ({
+        order_id: order.id,
+        product_id: item.id,
+        quantity: item.quantity,
+        price: item.price,
+      }));
+
+      const { error: itemsError } = await supabase
+        .from("order_items")
+        .insert(orderItems);
+
+      if (itemsError) throw itemsError;
+
+      // Clear cart
+      clearCart();
+
+      toast({
+        title: "Order Placed Successfully!",
+        description: `Your order #${order.id.slice(0, 8)} has been placed. Payment: Cash on Delivery`,
+      });
+
+      navigate("/");
+    } catch (error: any) {
+      console.error("Checkout error:", error);
+      toast({
+        title: "Order Failed",
+        description: error.message || "Failed to place order. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsProcessing(false);
+    }
+  };
 
   if (items.length === 0) {
     return (
@@ -119,7 +199,13 @@ const Cart = () => {
                     </div>
                   </div>
                 </div>
-                <Button className="mt-6 w-full">Proceed to Checkout</Button>
+                <Button 
+                  className="mt-6 w-full" 
+                  onClick={handleCheckout}
+                  disabled={isProcessing}
+                >
+                  {isProcessing ? "Processing..." : "Proceed to Checkout (Cash on Delivery)"}
+                </Button>
                 <Button variant="outline" className="mt-2 w-full" asChild>
                   <Link to="/shop">Continue Shopping</Link>
                 </Button>
