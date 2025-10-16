@@ -12,7 +12,7 @@ const Index = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("products")
-        .select("*")
+        .select("*, categories(name)")
         .eq("status", "Active")
         .eq("is_featured", true)
         .order("created_at", { ascending: false })
@@ -23,7 +23,7 @@ const Index = () => {
         image: product.image_url || product1,
         name: product.name,
         price: Number(product.price),
-        category: product.category_id || "uncategorized",
+        category: product.categories?.name || "uncategorized",
       }));
     },
   });
