@@ -10,6 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -92,15 +93,15 @@ export default function AdminCategories() {
 
   return (
     <AdminLayout>
-      <div className="space-y-6">
-        <div className="flex items-center justify-between">
+      <div className="space-y-4 md:space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h2 className="text-3xl font-bold tracking-tight">Categories</h2>
-            <p className="text-muted-foreground">
+            <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Categories</h2>
+            <p className="text-sm md:text-base text-muted-foreground">
               Organize your products into categories.
             </p>
           </div>
-          <Button onClick={handleAdd}>
+          <Button onClick={handleAdd} className="w-full sm:w-auto">
             <Plus className="mr-2 h-4 w-4" />
             Add Category
           </Button>
@@ -110,52 +111,56 @@ export default function AdminCategories() {
           <CardHeader>
             <CardTitle>All Categories</CardTitle>
           </CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>ID</TableHead>
-                  <TableHead>Category Name</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {categories?.map((category) => (
-                  <TableRow key={category.id}>
-                    <TableCell className="font-medium">{category.id.slice(0, 8)}</TableCell>
-                    <TableCell>{category.name}</TableCell>
-                    <TableCell>
-                      <span
-                        className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${
-                          category.status === "Active"
-                            ? "bg-green-50 text-green-700"
-                            : "bg-gray-50 text-gray-700"
-                        }`}
-                      >
-                        {category.status}
-                      </span>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleEdit(category)}
-                      >
-                        <Pencil className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleDeleteClick(category.id)}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                )) || <TableRow><TableCell colSpan={5} className="text-center text-muted-foreground">No categories yet</TableCell></TableRow>}
-              </TableBody>
-            </Table>
+          <CardContent className="p-0">
+            <ScrollArea className="w-full">
+              <div className="min-w-[600px]">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>ID</TableHead>
+                      <TableHead>Category Name</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead className="text-right">Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {categories?.map((category) => (
+                      <TableRow key={category.id}>
+                        <TableCell className="font-medium">{category.id.slice(0, 8)}</TableCell>
+                        <TableCell>{category.name}</TableCell>
+                        <TableCell>
+                          <span
+                            className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${
+                              category.status === "Active"
+                                ? "bg-green-50 text-green-700"
+                                : "bg-gray-50 text-gray-700"
+                            }`}
+                          >
+                            {category.status}
+                          </span>
+                        </TableCell>
+                        <TableCell className="text-right">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleEdit(category)}
+                          >
+                            <Pencil className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleDeleteClick(category.id)}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    )) || <TableRow><TableCell colSpan={5} className="text-center text-muted-foreground">No categories yet</TableCell></TableRow>}
+                  </TableBody>
+                </Table>
+              </div>
+            </ScrollArea>
           </CardContent>
         </Card>
       </div>

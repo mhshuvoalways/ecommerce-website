@@ -38,6 +38,16 @@ All colors MUST be HSL.
 
     --radius: 0.5rem;
 
+    /* Sidebar colors */
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 240 10% 15%;
+    --sidebar-primary: 240 10% 15%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 15 65% 60%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 240 10% 90%;
+    --sidebar-ring: 240 10% 15%;
+
     /* Gradients */
     --gradient-hero: linear-gradient(135deg, hsl(240 10% 15%) 0%, hsl(240 8% 25%) 100%);
     
@@ -78,6 +88,16 @@ All colors MUST be HSL.
     --border: 240 10% 25%;
     --input: 240 10% 25%;
     --ring: 0 0% 83.1%;
+
+    /* Sidebar colors for dark mode */
+    --sidebar-background: 240 10% 15%;
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-primary: 0 0% 98%;
+    --sidebar-primary-foreground: 240 10% 15%;
+    --sidebar-accent: 15 65% 60%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 240 10% 25%;
+    --sidebar-ring: 0 0% 83.1%;
   }
 }
 

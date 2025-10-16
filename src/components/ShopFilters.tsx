@@ -7,7 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 interface ShopFiltersProps {
   selectedCategories: string[];
-  onCategoryChange: (category: string) => void;
+  onCategoryChange: (categoryName: string) => void;
   priceRange: number[];
   onPriceChange: (value: number[]) => void;
   minRating: number;
@@ -51,8 +51,8 @@ const ShopFilters = ({
             <div key={category.id} className="flex items-center space-x-2">
               <Checkbox
                 id={category.id}
-                checked={selectedCategories.includes(category.id)}
-                onCheckedChange={() => onCategoryChange(category.id)}
+                checked={selectedCategories.includes(category.name)}
+                onCheckedChange={() => onCategoryChange(category.name)}
               />
               <Label
                 htmlFor={category.id}

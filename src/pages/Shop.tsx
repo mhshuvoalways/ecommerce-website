@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
@@ -14,9 +15,42 @@ import product1 from "@/assets/product-1.jpg";
 const placeholderImages = [product1];
 
 const Shop = () => {
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [priceRange, setPriceRange] = useState<number[]>([0, 500]);
-  const [minRating, setMinRating] = useState<number>(0);
+  const [searchParams, setSearchParams] = useSearchParams();
+  
+  // Initialize state from URL params
+  const [selectedCategories, setSelectedCategories] = useState<string[]>(() => {
+    const categories = searchParams.get("categories");
+    return categories ? categories.split(",") : [];
+  });
+  const [priceRange, setPriceRange] = useState<number[]>(() => {
+    const min = searchParams.get("minPrice");
+    const max = searchParams.get("maxPrice");
+    return [min ? Number(min) : 0, max ? Number(max) : 500];
+  });
+  const [minRating, setMinRating] = useState<number>(() => {
+    const rating = searchParams.get("rating");
+    return rating ? Number(rating) : 0;
+  });
+
+  // Update URL when filters change
+  useEffect(() => {
+    const params = new URLSearchParams();
+    
+    if (selectedCategories.length > 0) {
+      params.set("categories", selectedCategories.join(","));
+    }
+    
+    if (priceRange[0] !== 0 || priceRange[1] !== 500) {
+      params.set("minPrice", priceRange[0].toString());
+      params.set("maxPrice", priceRange[1].toString());
+    }
+    
+    if (minRating > 0) {
+      params.set("rating", minRating.toString());
+    }
+    
+    setSearchParams(params, { replace: true });
+  }, [selectedCategories, priceRange, minRating, setSearchParams]);
 
   const { data: products = [] } = useQuery({
     queryKey: ["products"],
@@ -32,7 +66,7 @@ const Shop = () => {
         image: product.image_url || placeholderImages[index % placeholderImages.length],
         name: product.name,
         price: Number(product.price),
-        categoryId: product.category_id,
+        categoryName: product.categories?.name || "uncategorized",
         category: product.categories?.name?.toLowerCase() || "uncategorized",
       }));
     },
@@ -54,7 +88,7 @@ const Shop = () => {
   const filteredProducts = products.filter((product) => {
     const categoryMatch =
       selectedCategories.length === 0 ||
-      (product.categoryId && selectedCategories.includes(product.categoryId));
+      selectedCategories.includes(product.categoryName);
     const priceMatch =
       product.price >= priceRange[0] && product.price <= priceRange[1];
     const ratingMatch = minRating === 0;

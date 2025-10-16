@@ -28,7 +28,7 @@ function AdminSidebar() {
 
   return (
     <Sidebar className={open ? "w-60" : "w-14"}>
-      <SidebarContent>
+      <SidebarContent className="bg-sidebar text-sidebar-foreground">
         <SidebarGroup>
           <SidebarGroupLabel>Admin Panel</SidebarGroupLabel>
           <SidebarGroupContent>
@@ -37,10 +37,10 @@ function AdminSidebar() {
                 const isActive = location.pathname === item.url;
                 return (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild>
+                    <SidebarMenuButton asChild isActive={isActive}>
                       <Link
                         to={item.url}
-                        className={isActive ? "bg-accent text-accent-foreground" : ""}
+                        className={isActive ? "bg-accent text-accent-foreground hover:bg-accent hover:text-accent-foreground" : ""}
                       >
                         <item.icon className="h-4 w-4" />
                         {open && <span>{item.title}</span>}
@@ -79,14 +79,14 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
     <SidebarProvider>
       <div className="min-h-screen flex w-full">
         <AdminSidebar />
-        <main className="flex-1">
-          <header className="h-14 border-b flex items-center px-4 bg-background sticky top-0 z-10">
+        <main className="flex-1 min-w-0">
+          <header className="h-14 border-b flex items-center px-3 md:px-4 bg-background sticky top-0 z-10">
             <SidebarTrigger>
               <Menu className="h-5 w-5" />
             </SidebarTrigger>
-            <h1 className="ml-4 text-lg font-semibold">Admin Dashboard</h1>
+            <h1 className="ml-3 md:ml-4 text-base md:text-lg font-semibold truncate">Admin Dashboard</h1>
           </header>
-          <div className="p-6">{children}</div>
+          <div className="p-3 md:p-6">{children}</div>
         </main>
       </div>
     </SidebarProvider>

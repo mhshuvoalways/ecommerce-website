@@ -10,6 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -93,15 +94,15 @@ export default function AdminProducts() {
 
   return (
     <AdminLayout>
-      <div className="space-y-6">
-        <div className="flex items-center justify-between">
+      <div className="space-y-4 md:space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h2 className="text-3xl font-bold tracking-tight">Products</h2>
-            <p className="text-muted-foreground">
+            <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Products</h2>
+            <p className="text-sm md:text-base text-muted-foreground">
               Manage your product inventory and pricing.
             </p>
           </div>
-          <Button onClick={handleAdd}>
+          <Button onClick={handleAdd} className="w-full sm:w-auto">
             <Plus className="mr-2 h-4 w-4" />
             Add Product
           </Button>
@@ -111,56 +112,58 @@ export default function AdminProducts() {
           <CardHeader>
             <CardTitle>All Products</CardTitle>
           </CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>ID</TableHead>
-                  <TableHead>Product Name</TableHead>
-                  <TableHead>Price</TableHead>
-                  <TableHead>Stock</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {products?.map((product) => (
-                  <TableRow key={product.id}>
-                    <TableCell className="font-medium">{product.id.slice(0, 8)}</TableCell>
-                    <TableCell>{product.name}</TableCell>
-                    <TableCell>${Number(product.price).toFixed(2)}</TableCell>
-                    <TableCell>{product.stock}</TableCell>
-                    <TableCell>
-                      <span
-                        className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${
-                          product.stock > 0
-                            ? "bg-green-50 text-green-700"
-                            : "bg-red-50 text-red-700"
-                        }`}
-                      >
-                        {product.stock > 0 ? "Active" : "Out of Stock"}
-                      </span>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleEdit(product)}
-                      >
-                        <Pencil className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleDeleteClick(product.id)}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                )) || <TableRow><TableCell colSpan={6} className="text-center text-muted-foreground">No products yet</TableCell></TableRow>}
-              </TableBody>
-            </Table>
+          <CardContent className="p-0">
+            <div className="overflow-x-auto">
+              <Table className="min-w-[700px]">
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>ID</TableHead>
+                      <TableHead>Product Name</TableHead>
+                      <TableHead>Price</TableHead>
+                      <TableHead>Stock</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead className="text-right">Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {products?.map((product) => (
+                      <TableRow key={product.id}>
+                        <TableCell className="font-medium">{product.id.slice(0, 8)}</TableCell>
+                        <TableCell>{product.name}</TableCell>
+                        <TableCell>${Number(product.price).toFixed(2)}</TableCell>
+                        <TableCell>{product.stock}</TableCell>
+                        <TableCell>
+                          <span
+                            className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${
+                              product.stock > 0
+                                ? "bg-green-50 text-green-700"
+                                : "bg-red-50 text-red-700"
+                            }`}
+                          >
+                            {product.stock > 0 ? "Active" : "Out of Stock"}
+                          </span>
+                        </TableCell>
+                        <TableCell className="text-right">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleEdit(product)}
+                          >
+                            <Pencil className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleDeleteClick(product.id)}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    )) || <TableRow><TableCell colSpan={6} className="text-center text-muted-foreground">No products yet</TableCell></TableRow>}
+                  </TableBody>
+                </Table>
+            </div>
           </CardContent>
         </Card>
       </div>

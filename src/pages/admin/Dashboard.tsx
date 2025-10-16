@@ -59,10 +59,10 @@ export default function AdminDashboard() {
 
   return (
     <AdminLayout>
-      <div className="space-y-6">
+      <div className="space-y-4 md:space-y-6">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Overview</h2>
-          <p className="text-muted-foreground">
+          <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Overview</h2>
+          <p className="text-sm md:text-base text-muted-foreground">
             Here's what's happening with your store today.
           </p>
         </div>
@@ -84,8 +84,8 @@ export default function AdminDashboard() {
           ))}
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-          <Card className="col-span-4">
+        <div className="grid gap-4 md:grid-cols-2">
+          <Card>
             <CardHeader>
               <CardTitle>Recent Orders</CardTitle>
             </CardHeader>
@@ -108,7 +108,7 @@ export default function AdminDashboard() {
             </CardContent>
           </Card>
 
-          <Card className="col-span-3">
+          <Card>
             <CardHeader>
               <CardTitle>Top Products</CardTitle>
             </CardHeader>
