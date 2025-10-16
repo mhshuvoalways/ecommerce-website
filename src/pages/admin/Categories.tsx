@@ -116,7 +116,6 @@ export default function AdminCategories() {
                 <TableRow>
                   <TableHead>ID</TableHead>
                   <TableHead>Category Name</TableHead>
-                  <TableHead>Products</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
@@ -126,7 +125,6 @@ export default function AdminCategories() {
                   <TableRow key={category.id}>
                     <TableCell className="font-medium">{category.id.slice(0, 8)}</TableCell>
                     <TableCell>{category.name}</TableCell>
-                    <TableCell>0 products</TableCell>
                     <TableCell>
                       <span
                         className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${

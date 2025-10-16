@@ -1,18 +1,19 @@
-import { useCart } from "@/contexts/CartContext";
-import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
-import { Minus, Plus, Trash2 } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "@/hooks/useAuth";
-import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/hooks/use-toast";
-import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useCart } from "@/contexts/CartContext";
+import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
+import { Minus, Plus, Trash2 } from "lucide-react";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const Cart = () => {
-  const { items, updateQuantity, removeFromCart, totalPrice, clearCart } = useCart();
+  const { items, updateQuantity, removeFromCart, totalPrice, clearCart } =
+    useCart();
   const { user } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -38,8 +39,14 @@ const Cart = () => {
     }
 
     // Validate shipping info
-    if (!shippingInfo.name || !shippingInfo.address || !shippingInfo.city || 
-        !shippingInfo.state || !shippingInfo.zip || !shippingInfo.phone) {
+    if (
+      !shippingInfo.name ||
+      !shippingInfo.address ||
+      !shippingInfo.city ||
+      !shippingInfo.state ||
+      !shippingInfo.zip ||
+      !shippingInfo.phone
+    ) {
       toast({
         title: "Missing Information",
         description: "Please fill in all shipping details",
@@ -90,7 +97,10 @@ const Cart = () => {
 
       toast({
         title: "Order Placed Successfully!",
-        description: `Your order #${order.id.slice(0, 8)} has been placed. Payment: Cash on Delivery`,
+        description: `Your order #${order.id.slice(
+          0,
+          8
+        )} has been placed. Payment: Cash on Delivery`,
       });
 
       navigate("/");
@@ -98,7 +108,8 @@ const Cart = () => {
       console.error("Checkout error:", error);
       toast({
         title: "Order Failed",
-        description: error.message || "Failed to place order. Please try again.",
+        description:
+          error.message || "Failed to place order. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -136,83 +147,112 @@ const Cart = () => {
               Shopping Cart
             </h1>
             <p className="text-muted-foreground">
-              {items.length} {items.length === 1 ? "item" : "items"} in your cart
+              {items.length} {items.length === 1 ? "item" : "items"} in your
+              cart
             </p>
           </div>
         </div>
 
         <div className="container mx-auto px-4 py-12 md:px-6">
-          <div className="grid gap-8 lg:grid-cols-3">
+          <div className="grid gap-8 lg:grid-cols-2">
             {/* Shipping Information - Left Side */}
-            <div className="lg:col-span-1">
-              <div className="rounded-lg border p-6 shadow-sm">
-                <h2 className="mb-4 text-xl font-bold">Shipping Information</h2>
-                <div className="grid gap-4">
+            
+            <div className="rounded-lg border p-6 shadow-sm">
+              <h2 className="mb-4 text-xl font-bold">Shipping Information</h2>
+              <div className="grid gap-4">
+                <div className="grid gap-2">
+                  <Label htmlFor="name">Full Name</Label>
+                  <Input
+                    id="name"
+                    value={shippingInfo.name}
+                    onChange={(e) =>
+                      setShippingInfo({
+                        ...shippingInfo,
+                        name: e.target.value,
+                      })
+                    }
+                    placeholder="John Doe"
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="phone">Phone Number</Label>
+                  <Input
+                    id="phone"
+                    value={shippingInfo.phone}
+                    onChange={(e) =>
+                      setShippingInfo({
+                        ...shippingInfo,
+                        phone: e.target.value,
+                      })
+                    }
+                    placeholder="+1 (555) 000-0000"
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="address">Street Address</Label>
+                  <Input
+                    id="address"
+                    value={shippingInfo.address}
+                    onChange={(e) =>
+                      setShippingInfo({
+                        ...shippingInfo,
+                        address: e.target.value,
+                      })
+                    }
+                    placeholder="123 Main St, Apt 4B"
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
                   <div className="grid gap-2">
-                    <Label htmlFor="name">Full Name</Label>
+                    <Label htmlFor="city">City</Label>
                     <Input
-                      id="name"
-                      value={shippingInfo.name}
-                      onChange={(e) => setShippingInfo({ ...shippingInfo, name: e.target.value })}
-                      placeholder="John Doe"
+                      id="city"
+                      value={shippingInfo.city}
+                      onChange={(e) =>
+                        setShippingInfo({
+                          ...shippingInfo,
+                          city: e.target.value,
+                        })
+                      }
+                      placeholder="New York"
                     />
                   </div>
                   <div className="grid gap-2">
-                    <Label htmlFor="phone">Phone Number</Label>
+                    <Label htmlFor="state">State</Label>
                     <Input
-                      id="phone"
-                      value={shippingInfo.phone}
-                      onChange={(e) => setShippingInfo({ ...shippingInfo, phone: e.target.value })}
-                      placeholder="+1 (555) 000-0000"
+                      id="state"
+                      value={shippingInfo.state}
+                      onChange={(e) =>
+                        setShippingInfo({
+                          ...shippingInfo,
+                          state: e.target.value,
+                        })
+                      }
+                      placeholder="NY"
                     />
                   </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="address">Street Address</Label>
-                    <Input
-                      id="address"
-                      value={shippingInfo.address}
-                      onChange={(e) => setShippingInfo({ ...shippingInfo, address: e.target.value })}
-                      placeholder="123 Main St, Apt 4B"
-                    />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="grid gap-2">
-                      <Label htmlFor="city">City</Label>
-                      <Input
-                        id="city"
-                        value={shippingInfo.city}
-                        onChange={(e) => setShippingInfo({ ...shippingInfo, city: e.target.value })}
-                        placeholder="New York"
-                      />
-                    </div>
-                    <div className="grid gap-2">
-                      <Label htmlFor="state">State</Label>
-                      <Input
-                        id="state"
-                        value={shippingInfo.state}
-                        onChange={(e) => setShippingInfo({ ...shippingInfo, state: e.target.value })}
-                        placeholder="NY"
-                      />
-                    </div>
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="zip">ZIP Code</Label>
-                    <Input
-                      id="zip"
-                      value={shippingInfo.zip}
-                      onChange={(e) => setShippingInfo({ ...shippingInfo, zip: e.target.value })}
-                      placeholder="10001"
-                    />
-                  </div>
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="zip">ZIP Code</Label>
+                  <Input
+                    id="zip"
+                    value={shippingInfo.zip}
+                    onChange={(e) =>
+                      setShippingInfo({
+                        ...shippingInfo,
+                        zip: e.target.value,
+                      })
+                    }
+                    placeholder="10001"
+                  />
                 </div>
               </div>
             </div>
 
             {/* Cart Items and Order Summary - Right Side */}
-            <div className="lg:col-span-2 space-y-6">
+            <div className="space-y-6">
               {/* Cart Items */}
               <div className="space-y-4">
-                <h2 className="text-xl font-bold">Cart Items</h2>
                 {items.map((item) => (
                   <div
                     key={item.id}
@@ -286,12 +326,14 @@ const Cart = () => {
                     </div>
                   </div>
                 </div>
-                <Button 
-                  className="mt-6 w-full" 
+                <Button
+                  className="mt-6 w-full"
                   onClick={handlePlaceOrder}
                   disabled={isProcessing}
                 >
-                  {isProcessing ? "Processing..." : "Place Order (Cash on Delivery)"}
+                  {isProcessing
+                    ? "Processing..."
+                    : "Place Order"}
                 </Button>
                 <Button variant="outline" className="mt-2 w-full" asChild>
                   <Link to="/shop">Continue Shopping</Link>
