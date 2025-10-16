@@ -10,6 +10,9 @@ import Cart from "./pages/Cart";
 import ProductDetails from "./pages/ProductDetails";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
+import ManageAccount from "./pages/ManageAccount";
+import MyOrders from "./pages/MyOrders";
+import MyReviews from "./pages/MyReviews";
 import AdminDashboard from "./pages/admin/Dashboard";
 import AdminProducts from "./pages/admin/Products";
 import AdminCategories from "./pages/admin/Categories";
@@ -30,6 +33,9 @@ const App = () => (
             <Route path="/cart" element={<Cart />} />
             <Route path="/product/:id" element={<ProductDetails />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/manage-account" element={<ManageAccount />} />
+            <Route path="/my-orders" element={<MyOrders />} />
+            <Route path="/my-reviews" element={<MyReviews />} />
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/admin/products" element={<AdminProducts />} />
             <Route path="/admin/categories" element={<AdminCategories />} />

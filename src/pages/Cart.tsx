@@ -8,8 +8,9 @@ import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Minus, Plus, Trash2 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 
 const Cart = () => {
   const { items, updateQuantity, removeFromCart, totalPrice, clearCart } =
@@ -26,6 +27,33 @@ const Cart = () => {
     zip: "",
     phone: "",
   });
+
+  const { data: profile } = useQuery({
+    queryKey: ["profile", user?.id],
+    queryFn: async () => {
+      if (!user) return null;
+      const { data } = await supabase
+        .from("profiles")
+        .select("shipping_name, shipping_address, shipping_city, shipping_state, shipping_zip, shipping_phone")
+        .eq("id", user.id)
+        .single();
+      return data;
+    },
+    enabled: !!user,
+  });
+
+  useEffect(() => {
+    if (profile && profile.shipping_name) {
+      setShippingInfo({
+        name: profile.shipping_name || "",
+        address: profile.shipping_address || "",
+        city: profile.shipping_city || "",
+        state: profile.shipping_state || "",
+        zip: profile.shipping_zip || "",
+        phone: profile.shipping_phone || "",
+      });
+    }
+  }, [profile]);
 
   const handlePlaceOrder = async () => {
     if (!user) {
