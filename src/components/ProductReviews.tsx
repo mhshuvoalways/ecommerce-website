@@ -13,6 +13,9 @@ interface Review {
   comment: string;
   created_at: string;
   user_id: string;
+  profiles?: {
+    full_name: string;
+  };
 }
 
 interface ProductReviewsProps {
@@ -35,7 +38,7 @@ export const ProductReviews = ({ productId }: ProductReviewsProps) => {
   const fetchReviews = async () => {
     const { data, error } = await supabase
       .from('reviews')
-      .select('*')
+      .select('*, profiles(full_name)')
       .eq('product_id', productId)
       .order('created_at', { ascending: false });
 
@@ -164,7 +167,9 @@ export const ProductReviews = ({ productId }: ProductReviewsProps) => {
                   />
                 ))}
               </div>
-              <span className="font-semibold">User</span>
+              <span className="font-semibold">
+                {review.profiles?.full_name || 'Anonymous'}
+              </span>
               <span className="text-sm text-muted-foreground">
                 {new Date(review.created_at).toLocaleDateString()}
               </span>
