@@ -109,7 +109,7 @@ const ManageAccount = () => {
       <main className="container mx-auto px-4 py-8 min-h-screen">
         <h1 className="text-3xl font-bold mb-8">Manage Account</h1>
         
-        <form onSubmit={handleSubmit} className="max-w-2xl space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-4">
             <h2 className="text-xl font-semibold">Personal Information</h2>
             <div>
