@@ -13,9 +13,7 @@ interface Review {
   comment: string;
   created_at: string;
   user_id: string;
-  profiles?: {
-    full_name: string;
-  };
+  user_name?: string;
 }
 
 interface ProductReviewsProps {
@@ -36,17 +34,34 @@ export const ProductReviews = ({ productId }: ProductReviewsProps) => {
   }, [productId]);
 
   const fetchReviews = async () => {
-    const { data, error } = await supabase
+    const { data: reviewsData, error } = await supabase
       .from('reviews')
-      .select('*, profiles(full_name)')
+      .select('*')
       .eq('product_id', productId)
       .order('created_at', { ascending: false });
 
     if (error) {
       console.error('Error fetching reviews:', error);
-    } else {
-      setReviews(data || []);
+      return;
     }
+
+    // Fetch user names for each review
+    const reviewsWithNames = await Promise.all(
+      (reviewsData || []).map(async (review) => {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('full_name')
+          .eq('id', review.user_id)
+          .single();
+        
+        return {
+          ...review,
+          user_name: profile?.full_name || 'Anonymous'
+        };
+      })
+    );
+
+    setReviews(reviewsWithNames);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -167,9 +182,7 @@ export const ProductReviews = ({ productId }: ProductReviewsProps) => {
                   />
                 ))}
               </div>
-              <span className="font-semibold">
-                {review.profiles?.full_name || 'Anonymous'}
-              </span>
+              <span className="font-semibold">{review.user_name}</span>
               <span className="text-sm text-muted-foreground">
                 {new Date(review.created_at).toLocaleDateString()}
               </span>
