@@ -29,7 +29,7 @@ const Cart = () => {
   });
 
   const { data: profile } = useQuery({
-    queryKey: ["profile", user?.id],
+    queryKey: ["profiles", user?.id],
     queryFn: async () => {
       if (!user) return null;
       const { data } = await supabase
