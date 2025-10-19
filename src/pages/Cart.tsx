@@ -43,7 +43,7 @@ const Cart = () => {
   });
 
   useEffect(() => {
-    if (profile && profile.shipping_name) {
+    if (profile) {
       setShippingInfo({
         name: profile.shipping_name || "",
         address: profile.shipping_address || "",
