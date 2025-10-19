@@ -31,7 +31,7 @@ export const ProductReviews = ({ productId }: ProductReviewsProps) => {
 
   useEffect(() => {
     fetchReviews();
-  }, [productId]);
+  }, [productId, user?.id]);
 
   const fetchReviews = async () => {
     const { data: reviewsData, error } = await supabase
@@ -62,6 +62,15 @@ export const ProductReviews = ({ productId }: ProductReviewsProps) => {
     );
 
     setReviews(reviewsWithNames);
+
+    // Pre-fill form if user already reviewed
+    if (user) {
+      const existing = reviewsWithNames.find((r) => r.user_id === user.id);
+      if (existing) {
+        setRating(existing.rating);
+        setComment(existing.comment || '');
+      }
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -77,13 +86,14 @@ export const ProductReviews = ({ productId }: ProductReviewsProps) => {
       return;
     }
 
+    const isUpdate = reviews.some((r) => r.user_id === user.id);
     setLoading(true);
-    const { error } = await supabase.from('reviews').insert({
-      product_id: productId,
-      user_id: user.id,
-      rating,
-      comment,
-    });
+    const { error } = await supabase
+      .from('reviews')
+      .upsert(
+        { product_id: productId, user_id: user.id, rating, comment },
+        { onConflict: 'product_id,user_id' }
+      );
 
     if (error) {
       toast({
@@ -92,7 +102,7 @@ export const ProductReviews = ({ productId }: ProductReviewsProps) => {
         variant: 'destructive',
       });
     } else {
-      toast({ title: 'Review submitted successfully!' });
+      toast({ title: isUpdate ? 'Review updated successfully!' : 'Review submitted successfully!' });
       setRating(0);
       setComment('');
       fetchReviews();
