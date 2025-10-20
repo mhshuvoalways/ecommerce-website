@@ -51,9 +51,6 @@ const Header = () => {
           </nav>
         </div>
         <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon">
-            <Search className="h-5 w-5" />
-          </Button>
           <Button variant="ghost" size="icon" className="relative" asChild>
             <Link to="/cart">
               <ShoppingCart className="h-5 w-5" />
