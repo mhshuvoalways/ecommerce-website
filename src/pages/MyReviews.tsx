@@ -26,6 +26,7 @@ const MyReviews = () => {
   const [editingReview, setEditingReview] = useState<any>(null);
   const [editComment, setEditComment] = useState("");
   const [editRating, setEditRating] = useState(5);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -106,6 +107,7 @@ const MyReviews = () => {
       queryClient.invalidateQueries({ queryKey: ["my-reviews"] });
       toast({ title: "Review updated successfully" });
       setEditingReview(null);
+      setDialogOpen(false);
     },
     onError: () => {
       toast({ title: "Failed to update review", variant: "destructive" });
@@ -202,7 +204,7 @@ const MyReviews = () => {
                       </div>
                     </div>
                     <div className="flex gap-2">
-                      <Dialog>
+                      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
                         <DialogTrigger asChild>
                           <Button
                             variant="ghost"
@@ -211,6 +213,7 @@ const MyReviews = () => {
                               setEditingReview(review);
                               setEditComment(review.comment || "");
                               setEditRating(review.rating);
+                              setDialogOpen(true);
                             }}
                           >
                             <Pencil className="h-4 w-4" />
