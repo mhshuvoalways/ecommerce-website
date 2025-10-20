@@ -56,12 +56,6 @@ const Header = () => {
             >
               Shop
             </Link>
-            <a
-              href="#"
-              className="text-sm font-medium transition-colors hover:text-accent"
-            >
-              Contact
-            </a>
           </nav>
         </div>
         <div className="flex items-center gap-4">
