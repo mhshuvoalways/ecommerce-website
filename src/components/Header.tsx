@@ -1,10 +1,4 @@
-import { Link } from "react-router-dom";
-import { ShoppingCart, Search, Menu, User, LogOut, Package, MessageSquare, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useCart } from "@/contexts/CartContext";
-import { useAuth } from "@/hooks/useAuth";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,6 +6,20 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useCart } from "@/contexts/CartContext";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
+import { useQuery } from "@tanstack/react-query";
+import {
+  LogOut,
+  Menu,
+  MessageSquare,
+  Package,
+  Settings,
+  ShoppingCart,
+  User,
+} from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   const { totalItems } = useCart();
@@ -39,13 +47,19 @@ const Header = () => {
             <Menu className="h-5 w-5" />
           </Button>
           <Link to="/">
-            <h1 className="text-2xl font-bold tracking-tight">MINIMAL</h1>
+            <h1 className="text-2xl font-bold tracking-tight">eLocalShop</h1>
           </Link>
           <nav className="hidden md:flex gap-6">
-            <Link to="/shop" className="text-sm font-medium transition-colors hover:text-accent">
+            <Link
+              to="/shop"
+              className="text-sm font-medium transition-colors hover:text-accent"
+            >
               Shop
             </Link>
-            <a href="#" className="text-sm font-medium transition-colors hover:text-accent">
+            <a
+              href="#"
+              className="text-sm font-medium transition-colors hover:text-accent"
+            >
               Contact
             </a>
           </nav>
@@ -92,7 +106,10 @@ const Header = () => {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={signOut} className="text-destructive cursor-pointer">
+                <DropdownMenuItem
+                  onClick={signOut}
+                  className="text-destructive cursor-pointer"
+                >
                   <LogOut className="mr-2 h-4 w-4" />
                   Logout
                 </DropdownMenuItem>
