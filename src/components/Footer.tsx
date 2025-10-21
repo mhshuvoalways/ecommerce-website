@@ -4,9 +4,9 @@ const Footer = () => {
       <div className="container mx-auto px-4 py-12 md:px-6">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
           <div className="space-y-4">
-            <h3 className="text-lg font-bold">eLocalShop</h3>
+            <h3 className="text-lg font-bold">KinboMart</h3>
             <p className="text-sm text-muted-foreground">
-              Thoughtfully designed products for modern living.
+              Smart Shopping Starts Here
             </p>
           </div>
           <div>
@@ -98,7 +98,7 @@ const Footer = () => {
           </div>
         </div>
         <div className="mt-8 border-t pt-8 text-center text-sm text-muted-foreground">
-          <p>&copy; 2025 eLocalShop. All rights reserved.</p>
+          <p>&copy; 2025 KinboMart. All rights reserved.</p>
         </div>
       </div>
     </footer>

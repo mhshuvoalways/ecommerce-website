@@ -12,7 +12,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import {
   LogOut,
-  Menu,
   MessageSquare,
   Package,
   Settings,
@@ -44,7 +43,7 @@ const Header = () => {
       <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
         <div className="flex items-center gap-6">
           <Link to="/">
-            <h1 className="text-2xl font-bold tracking-tight">eLocalShop</h1>
+            <h1 className="text-2xl font-bold tracking-tight">KinboMart</h1>
           </Link>
           <nav className="flex gap-6">
             <Link
