@@ -8,10 +8,12 @@ import { supabase } from "@/integrations/supabase/client";
 import { Loader2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { useCurrencySymbol } from "@/hooks/useCurrencySymbol";
 
 const MyOrders = () => {
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
+  const currencySymbol = useCurrencySymbol();
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -93,14 +95,14 @@ const MyOrders = () => {
                         <div className="flex-1">
                           <p className="font-medium">{item.products?.name}</p>
                           <p className="text-sm text-muted-foreground">
-                            Quantity: {item.quantity} × ${Number(item.price).toFixed(2)}
+                            Quantity: {item.quantity} × {currencySymbol}{Number(item.price).toFixed(2)}
                           </p>
                         </div>
                       </div>
                     ))}
                     <div className="pt-3 border-t">
                       <p className="font-semibold text-right">
-                        Total: ${Number(order.total).toFixed(2)}
+                        Total: {currencySymbol}{Number(order.total).toFixed(2)}
                       </p>
                     </div>
                   </div>

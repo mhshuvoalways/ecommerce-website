@@ -246,6 +246,24 @@ export type Database = {
           },
         ]
       }
+      site_settings: {
+        Row: {
+          created_at: string | null
+          currency_symbol: string
+          id: string
+        }
+        Insert: {
+          created_at?: string | null
+          currency_symbol?: string
+          id?: string
+        }
+        Update: {
+          created_at?: string | null
+          currency_symbol?: string
+          id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

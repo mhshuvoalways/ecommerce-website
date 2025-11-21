@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
 import { toast } from "@/hooks/use-toast";
+import { useCurrencySymbol } from "@/hooks/useCurrencySymbol";
 
 interface ProductCardProps {
   id: string;
@@ -14,6 +15,7 @@ interface ProductCardProps {
 
 const ProductCard = ({ id, image, name, price, category }: ProductCardProps) => {
   const { addToCart } = useCart();
+  const currencySymbol = useCurrencySymbol();
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -45,7 +47,7 @@ const ProductCard = ({ id, image, name, price, category }: ProductCardProps) => 
               <h3 className="mt-1 font-medium">{name}</h3>
             </div>
             <div className="flex items-center justify-between">
-              <p className="text-lg font-semibold">${price}</p>
+              <p className="text-lg font-semibold">{currencySymbol}{price}</p>
               <Button variant="ghost" size="sm" onClick={handleAddToCart}>
                 Add to Cart
               </Button>

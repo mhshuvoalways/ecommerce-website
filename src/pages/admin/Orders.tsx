@@ -18,11 +18,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
+import { useCurrencySymbol } from "@/hooks/useCurrencySymbol";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 export default function AdminOrders() {
   const queryClient = useQueryClient();
+  const currencySymbol = useCurrencySymbol();
   
   const { data: orders } = useQuery({
     queryKey: ["admin-all-orders"],
@@ -95,7 +97,7 @@ export default function AdminOrders() {
                       {new Date(order.created_at).toLocaleDateString()}
                     </TableCell>
                     <TableCell>{order.order_items?.length || 0}</TableCell>
-                    <TableCell>${Number(order.total).toFixed(2)}</TableCell>
+                    <TableCell>{currencySymbol}{Number(order.total).toFixed(2)}</TableCell>
                     <TableCell>
                       <div className="text-sm">
                         <div className="font-medium">{order.shipping_name}</div>

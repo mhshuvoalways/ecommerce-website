@@ -1,3 +1,4 @@
+import Logo from "@/assets/logo.jpg";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -41,12 +42,9 @@ const Header = () => {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-8">
           <Link to="/" className="flex items-center gap-1">
-            <ShoppingCart color="#DB7857" size={36} strokeWidth={2.5} />
-            <h1 className="text-2xl font-bold tracking-tight text-accent">
-              KinboMart
-            </h1>
+            <img src={Logo} alt="logo" className="w-16"/>
           </Link>
           <nav className="flex gap-6">
             <Link

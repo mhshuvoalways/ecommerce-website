@@ -11,6 +11,7 @@ import { Minus, Plus, Trash2 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import { useCurrencySymbol } from "@/hooks/useCurrencySymbol";
 
 const Cart = () => {
   const { items, updateQuantity, removeFromCart, totalPrice, clearCart } =
@@ -18,6 +19,7 @@ const Cart = () => {
   const { user } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
+  const currencySymbol = useCurrencySymbol();
   const [isProcessing, setIsProcessing] = useState(false);
   const [shippingInfo, setShippingInfo] = useState({
     name: "",
@@ -295,7 +297,7 @@ const Cart = () => {
                       <div>
                         <h3 className="font-semibold">{item.name}</h3>
                         <p className="text-sm text-muted-foreground">
-                          ${item.price}
+                          {currencySymbol}{item.price}
                         </p>
                       </div>
                       <div className="flex items-center gap-2">
@@ -329,7 +331,7 @@ const Cart = () => {
                       </div>
                     </div>
                     <div className="text-right font-semibold">
-                      ${(item.price * item.quantity).toFixed(2)}
+                      {currencySymbol}{(item.price * item.quantity).toFixed(2)}
                     </div>
                   </div>
                 ))}
@@ -341,7 +343,7 @@ const Cart = () => {
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Subtotal</span>
-                    <span>${totalPrice.toFixed(2)}</span>
+                    <span>{currencySymbol}{totalPrice.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Shipping</span>
@@ -350,7 +352,7 @@ const Cart = () => {
                   <div className="border-t pt-2">
                     <div className="flex justify-between text-lg font-bold">
                       <span>Total</span>
-                      <span>${totalPrice.toFixed(2)}</span>
+                      <span>{currencySymbol}{totalPrice.toFixed(2)}</span>
                     </div>
                   </div>
                 </div>

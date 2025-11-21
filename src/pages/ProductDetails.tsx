@@ -9,10 +9,12 @@ import { ProductReviews } from "@/components/ProductReviews";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import product1 from "@/assets/product-1.jpg";
+import { useCurrencySymbol } from "@/hooks/useCurrencySymbol";
 
 const ProductDetails = () => {
   const { id } = useParams();
   const { addToCart } = useCart();
+  const currencySymbol = useCurrencySymbol();
   
   const { data: product, isLoading } = useQuery({
     queryKey: ["product", id],
@@ -111,7 +113,7 @@ const ProductDetails = () => {
                 </h1>
               </div>
 
-              <p className="text-3xl font-bold">${product.price}</p>
+              <p className="text-3xl font-bold">{currencySymbol}{product.price}</p>
 
               {product.description && (
                 <div>

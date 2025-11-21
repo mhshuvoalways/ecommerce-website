@@ -4,6 +4,7 @@ import { Slider } from "@/components/ui/slider";
 import { Star } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useCurrencySymbol } from "@/hooks/useCurrencySymbol";
 
 interface ShopFiltersProps {
   selectedCategories: string[];
@@ -22,6 +23,7 @@ const ShopFilters = ({
   minRating,
   onRatingChange,
 }: ShopFiltersProps) => {
+  const currencySymbol = useCurrencySymbol();
   const { data: categories, isLoading } = useQuery({
     queryKey: ["categories"],
     queryFn: async () => {
@@ -81,9 +83,9 @@ const ShopFilters = ({
             className="w-full"
           />
           <div className="flex items-center justify-between text-sm">
-            <span className="font-medium">${priceRange[0]}</span>
+            <span className="font-medium">{currencySymbol}{priceRange[0]}</span>
             <span className="text-muted-foreground">to</span>
-            <span className="font-medium">${priceRange[1]}</span>
+            <span className="font-medium">{currencySymbol}{priceRange[1]}</span>
           </div>
         </div>
       </div>

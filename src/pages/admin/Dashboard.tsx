@@ -3,8 +3,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DollarSign, Package, ShoppingCart, Users } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useCurrencySymbol } from "@/hooks/useCurrencySymbol";
 
 export default function AdminDashboard() {
+  const currencySymbol = useCurrencySymbol();
   const { data: orders } = useQuery({
     queryKey: ["admin-orders"],
     queryFn: async () => {
@@ -33,7 +35,7 @@ export default function AdminDashboard() {
   const stats = [
     {
       title: "Total Revenue",
-      value: `$${totalRevenue.toFixed(2)}`,
+      value: `${currencySymbol}${totalRevenue.toFixed(2)}`,
       change: "+20.1% from last month",
       icon: DollarSign,
     },
@@ -98,7 +100,7 @@ export default function AdminDashboard() {
                         Order #{order.id.slice(0, 8)}
                       </p>
                       <p className="text-sm text-muted-foreground">
-                        {order.customer_email} - ${Number(order.total).toFixed(2)}
+                        {order.customer_email} - {currencySymbol}{Number(order.total).toFixed(2)}
                       </p>
                     </div>
                     <div className="ml-auto font-medium">{order.status}</div>

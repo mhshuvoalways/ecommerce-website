@@ -26,6 +26,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { ProductDialog } from "@/components/admin/ProductDialog";
 import { useToast } from "@/hooks/use-toast";
+import { useCurrencySymbol } from "@/hooks/useCurrencySymbol";
 
 export default function AdminProducts() {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -34,6 +35,7 @@ export default function AdminProducts() {
   const [productToDelete, setProductToDelete] = useState<string | null>(null);
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const currencySymbol = useCurrencySymbol();
 
   const { data: products } = useQuery({
     queryKey: ["admin-products"],
@@ -130,7 +132,7 @@ export default function AdminProducts() {
                       <TableRow key={product.id}>
                         <TableCell className="font-medium">{product.id.slice(0, 8)}</TableCell>
                         <TableCell>{product.name}</TableCell>
-                        <TableCell>${Number(product.price).toFixed(2)}</TableCell>
+                        <TableCell>{currencySymbol}{Number(product.price).toFixed(2)}</TableCell>
                         <TableCell>{product.stock}</TableCell>
                         <TableCell>
                           <span

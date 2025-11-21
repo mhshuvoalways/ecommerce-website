@@ -13,10 +13,17 @@ import NotFound from "./pages/NotFound";
 import ManageAccount from "./pages/ManageAccount";
 import MyOrders from "./pages/MyOrders";
 import MyReviews from "./pages/MyReviews";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
+import Careers from "./pages/Careers";
+import Shipping from "./pages/Shipping";
+import FAQ from "./pages/FAQ";
+import Privacy from "./pages/Privacy";
 import AdminDashboard from "./pages/admin/Dashboard";
 import AdminProducts from "./pages/admin/Products";
 import AdminCategories from "./pages/admin/Categories";
 import AdminOrders from "./pages/admin/Orders";
+import AdminSettings from "./pages/admin/Settings";
 
 const queryClient = new QueryClient();
 
@@ -36,10 +43,17 @@ const App = () => (
             <Route path="/manage-account" element={<ManageAccount />} />
             <Route path="/my-orders" element={<MyOrders />} />
             <Route path="/my-reviews" element={<MyReviews />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/careers" element={<Careers />} />
+            <Route path="/shipping" element={<Shipping />} />
+            <Route path="/faq" element={<FAQ />} />
+            <Route path="/privacy" element={<Privacy />} />
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/admin/products" element={<AdminProducts />} />
             <Route path="/admin/categories" element={<AdminCategories />} />
             <Route path="/admin/orders" element={<AdminOrders />} />
+            <Route path="/admin/settings" element={<AdminSettings />} />
             {/* ADD_ROUTES_ABOVE_THIS - DO_NOT_REMOVE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

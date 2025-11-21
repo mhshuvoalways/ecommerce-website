@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const Footer = () => {
   return (
     <footer className="border-t bg-muted/50">
@@ -13,28 +15,28 @@ const Footer = () => {
             <h4 className="mb-4 font-semibold">Shop</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <a
-                  href="#"
+                <Link
+                  to="/shop"
                   className="text-muted-foreground hover:text-foreground"
                 >
                   All Products
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="#"
+                <Link
+                  to="/shop"
                   className="text-muted-foreground hover:text-foreground"
                 >
                   New Arrivals
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="#"
+                <Link
+                  to="/shop"
                   className="text-muted-foreground hover:text-foreground"
                 >
                   Collections
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -42,28 +44,28 @@ const Footer = () => {
             <h4 className="mb-4 font-semibold">Company</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <a
-                  href="#"
+                <Link
+                  to="/about"
                   className="text-muted-foreground hover:text-foreground"
                 >
                   About Us
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="#"
+                <Link
+                  to="/contact"
                   className="text-muted-foreground hover:text-foreground"
                 >
                   Contact
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="#"
+                <Link
+                  to="/careers"
                   className="text-muted-foreground hover:text-foreground"
                 >
                   Careers
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -71,28 +73,28 @@ const Footer = () => {
             <h4 className="mb-4 font-semibold">Support</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <a
-                  href="#"
+                <Link
+                  to="/shipping"
                   className="text-muted-foreground hover:text-foreground"
                 >
                   Shipping & Returns
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="#"
+                <Link
+                  to="/faq"
                   className="text-muted-foreground hover:text-foreground"
                 >
                   FAQ
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="#"
+                <Link
+                  to="/privacy"
                   className="text-muted-foreground hover:text-foreground"
                 >
                   Privacy Policy
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
