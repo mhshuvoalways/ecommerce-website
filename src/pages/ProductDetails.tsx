@@ -10,6 +10,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import product1 from "@/assets/product-1.jpg";
 import { useCurrencySymbol } from "@/hooks/useCurrencySymbol";
+import DOMPurify from "dompurify";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -118,7 +119,12 @@ const ProductDetails = () => {
               {product.description && (
                 <div>
                   <h3 className="mb-2 font-semibold">Description</h3>
-                  <p className="text-muted-foreground">{product.description}</p>
+                  <div 
+                    className="text-muted-foreground prose prose-sm max-w-none [&_h1]:text-2xl [&_h2]:text-xl [&_h3]:text-lg [&_ul]:list-disc [&_ul]:ml-4 [&_ol]:list-decimal [&_ol]:ml-4"
+                    dangerouslySetInnerHTML={{ 
+                      __html: DOMPurify.sanitize(product.description) 
+                    }}
+                  />
                 </div>
               )}
 

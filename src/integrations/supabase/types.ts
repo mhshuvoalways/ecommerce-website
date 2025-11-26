@@ -83,11 +83,8 @@ export type Database = {
           customer_email: string | null
           id: string
           shipping_address: string | null
-          shipping_city: string | null
           shipping_name: string | null
           shipping_phone: string | null
-          shipping_state: string | null
-          shipping_zip: string | null
           status: string | null
           total: number
           user_id: string
@@ -97,11 +94,8 @@ export type Database = {
           customer_email?: string | null
           id?: string
           shipping_address?: string | null
-          shipping_city?: string | null
           shipping_name?: string | null
           shipping_phone?: string | null
-          shipping_state?: string | null
-          shipping_zip?: string | null
           status?: string | null
           total: number
           user_id: string
@@ -111,11 +105,8 @@ export type Database = {
           customer_email?: string | null
           id?: string
           shipping_address?: string | null
-          shipping_city?: string | null
           shipping_name?: string | null
           shipping_phone?: string | null
-          shipping_state?: string | null
-          shipping_zip?: string | null
           status?: string | null
           total?: number
           user_id?: string
@@ -176,12 +167,6 @@ export type Database = {
           full_name: string | null
           id: string
           role: string | null
-          shipping_address: string | null
-          shipping_city: string | null
-          shipping_name: string | null
-          shipping_phone: string | null
-          shipping_state: string | null
-          shipping_zip: string | null
         }
         Insert: {
           avatar_url?: string | null
@@ -189,12 +174,6 @@ export type Database = {
           full_name?: string | null
           id: string
           role?: string | null
-          shipping_address?: string | null
-          shipping_city?: string | null
-          shipping_name?: string | null
-          shipping_phone?: string | null
-          shipping_state?: string | null
-          shipping_zip?: string | null
         }
         Update: {
           avatar_url?: string | null
@@ -202,12 +181,6 @@ export type Database = {
           full_name?: string | null
           id?: string
           role?: string | null
-          shipping_address?: string | null
-          shipping_city?: string | null
-          shipping_name?: string | null
-          shipping_phone?: string | null
-          shipping_state?: string | null
-          shipping_zip?: string | null
         }
         Relationships: []
       }

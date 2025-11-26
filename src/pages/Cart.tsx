@@ -8,9 +8,8 @@ import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Minus, Plus, Trash2 } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
 import { useCurrencySymbol } from "@/hooks/useCurrencySymbol";
 
 const Cart = () => {
@@ -24,38 +23,8 @@ const Cart = () => {
   const [shippingInfo, setShippingInfo] = useState({
     name: "",
     address: "",
-    city: "",
-    state: "",
-    zip: "",
     phone: "",
   });
-
-  const { data: profile } = useQuery({
-    queryKey: ["profiles", user?.id],
-    queryFn: async () => {
-      if (!user) return null;
-      const { data } = await supabase
-        .from("profiles")
-        .select("shipping_name, shipping_address, shipping_city, shipping_state, shipping_zip, shipping_phone")
-        .eq("id", user.id)
-        .single();
-      return data;
-    },
-    enabled: !!user,
-  });
-
-  useEffect(() => {
-    if (profile) {
-      setShippingInfo({
-        name: profile.shipping_name || "",
-        address: profile.shipping_address || "",
-        city: profile.shipping_city || "",
-        state: profile.shipping_state || "",
-        zip: profile.shipping_zip || "",
-        phone: profile.shipping_phone || "",
-      });
-    }
-  }, [profile]);
 
   const handlePlaceOrder = async () => {
     if (!user) {
@@ -72,9 +41,6 @@ const Cart = () => {
     if (
       !shippingInfo.name ||
       !shippingInfo.address ||
-      !shippingInfo.city ||
-      !shippingInfo.state ||
-      !shippingInfo.zip ||
       !shippingInfo.phone
     ) {
       toast({
@@ -98,9 +64,6 @@ const Cart = () => {
           status: "Pending",
           shipping_name: shippingInfo.name,
           shipping_address: shippingInfo.address,
-          shipping_city: shippingInfo.city,
-          shipping_state: shippingInfo.state,
-          shipping_zip: shippingInfo.zip,
           shipping_phone: shippingInfo.phone,
         })
         .select()
@@ -219,7 +182,7 @@ const Cart = () => {
                   />
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="address">Street Address</Label>
+                  <Label htmlFor="address">Address</Label>
                   <Input
                     id="address"
                     value={shippingInfo.address}
@@ -229,51 +192,7 @@ const Cart = () => {
                         address: e.target.value,
                       })
                     }
-                    placeholder="123 Main St, Apt 4B"
-                  />
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="grid gap-2">
-                    <Label htmlFor="city">City</Label>
-                    <Input
-                      id="city"
-                      value={shippingInfo.city}
-                      onChange={(e) =>
-                        setShippingInfo({
-                          ...shippingInfo,
-                          city: e.target.value,
-                        })
-                      }
-                      placeholder="New York"
-                    />
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="state">State</Label>
-                    <Input
-                      id="state"
-                      value={shippingInfo.state}
-                      onChange={(e) =>
-                        setShippingInfo({
-                          ...shippingInfo,
-                          state: e.target.value,
-                        })
-                      }
-                      placeholder="NY"
-                    />
-                  </div>
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="zip">ZIP Code</Label>
-                  <Input
-                    id="zip"
-                    value={shippingInfo.zip}
-                    onChange={(e) =>
-                      setShippingInfo({
-                        ...shippingInfo,
-                        zip: e.target.value,
-                      })
-                    }
-                    placeholder="10001"
+                    placeholder="taragunia, daulatpur, kushtia"
                   />
                 </div>
               </div>

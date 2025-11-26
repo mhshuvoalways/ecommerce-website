@@ -103,10 +103,7 @@ export default function AdminOrders() {
                         <div className="font-medium">{order.shipping_name}</div>
                         <div className="text-muted-foreground">
                           {order.shipping_address}
-                          {order.shipping_city && `, ${order.shipping_city}`}
-                          {order.shipping_state && `, ${order.shipping_state}`}
-                          {order.shipping_zip && `, ${order.shipping_zip}`}
-                          {order.shipping_phone && `, ${order.shipping_phone}`}
+                          {order.shipping_phone && ` | ${order.shipping_phone}`}
                         </div>
                       </div>
                     </TableCell>

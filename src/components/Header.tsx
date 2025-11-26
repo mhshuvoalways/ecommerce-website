@@ -79,12 +79,6 @@ const Header = () => {
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild className="cursor-pointer">
-                  <Link to="/manage-account">
-                    <Settings className="mr-2 h-4 w-4" />
-                    Manage Account
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild className="cursor-pointer">
                   <Link to="/my-orders">
                     <Package className="mr-2 h-4 w-4" />
                     My Orders
