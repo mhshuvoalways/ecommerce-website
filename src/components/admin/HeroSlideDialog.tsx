@@ -8,9 +8,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import { Upload, X } from "lucide-react";
@@ -58,6 +56,31 @@ export function HeroSlideDialog({
       setImageFile(file);
       setImagePreview(URL.createObjectURL(file));
     }
+  };
+
+  const getFileNameFromUrl = (url: string): string | null => {
+    try {
+      const urlObj = new URL(url);
+      const pathParts = urlObj.pathname.split("/");
+      return pathParts[pathParts.length - 1];
+    } catch {
+      return null;
+    }
+  };
+
+  const deleteImageFromStorage = async (imageUrl: string) => {
+    const fileName = getFileNameFromUrl(imageUrl);
+    if (fileName) {
+      await supabase.storage.from("hero-images").remove([fileName]);
+    }
+  };
+
+  const handleRemoveImage = async () => {
+    if (imagePreview && imagePreview.includes("hero-images")) {
+      await deleteImageFromStorage(imagePreview);
+    }
+    setImageFile(null);
+    setImagePreview(null);
   };
 
   const uploadImage = async (file: File): Promise<string> => {
@@ -140,10 +163,7 @@ export function HeroSlideDialog({
                   variant="destructive"
                   size="icon"
                   className="absolute top-2 right-2 h-8 w-8"
-                  onClick={() => {
-                    setImageFile(null);
-                    setImagePreview(null);
-                  }}
+                  onClick={handleRemoveImage}
                 >
                   <X className="h-4 w-4" />
                 </Button>
