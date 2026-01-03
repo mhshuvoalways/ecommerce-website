@@ -188,31 +188,6 @@ const Hero = () => {
                   alt={slide.title}
                   className="absolute inset-0 w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-black/40" />
-                <div className="relative container mx-auto px-4 md:px-6 h-full min-h-[500px] md:min-h-[600px] flex items-center">
-                  <div className="max-w-2xl text-white space-y-4">
-                    {slide.subtitle && (
-                      <p className="text-lg md:text-xl font-medium text-white/90">
-                        {slide.subtitle}
-                      </p>
-                    )}
-                    <h1 className="text-4xl md:text-6xl font-bold">
-                      {slide.title}
-                    </h1>
-                    {slide.description && (
-                      <p className="text-base md:text-lg text-white/90 max-w-xl">
-                        {slide.description}
-                      </p>
-                    )}
-                    {slide.button_text && slide.button_link && (
-                      <div className="pt-4">
-                        <Button asChild size="lg" className="bg-white text-black hover:bg-white/90">
-                          <Link to={slide.button_link}>{slide.button_text}</Link>
-                        </Button>
-                      </div>
-                    )}
-                  </div>
-                </div>
               </div>
             </CarouselItem>
           ))}
