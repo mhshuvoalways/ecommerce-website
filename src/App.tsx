@@ -23,6 +23,7 @@ import AdminProducts from "./pages/admin/Products";
 import AdminCategories from "./pages/admin/Categories";
 import AdminOrders from "./pages/admin/Orders";
 import AdminSettings from "./pages/admin/Settings";
+import AdminHeroSlides from "./pages/admin/HeroSlides";
 
 const queryClient = new QueryClient();
 
@@ -52,6 +53,7 @@ const App = () => (
             <Route path="/admin/categories" element={<AdminCategories />} />
             <Route path="/admin/orders" element={<AdminOrders />} />
             <Route path="/admin/settings" element={<AdminSettings />} />
+            <Route path="/admin/hero-slides" element={<AdminHeroSlides />} />
             {/* ADD_ROUTES_ABOVE_THIS - DO_NOT_REMOVE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
