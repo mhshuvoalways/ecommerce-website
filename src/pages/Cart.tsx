@@ -164,7 +164,7 @@ const Cart = () => {
                         name: e.target.value,
                       })
                     }
-                    placeholder="রহিম উদ্দিন"
+                    placeholder="Rahim Uddin"
                   />
                 </div>
                 <div className="grid gap-2">
