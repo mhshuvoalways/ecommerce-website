@@ -17,12 +17,7 @@ import { Upload, X } from "lucide-react";
 
 interface HeroSlide {
   id: string;
-  title: string;
-  subtitle: string | null;
-  description: string | null;
   image_url: string;
-  button_text: string | null;
-  button_link: string | null;
   display_order: number;
   is_active: boolean;
 }
@@ -41,11 +36,6 @@ export function HeroSlideDialog({
   nextOrder,
 }: HeroSlideDialogProps) {
   const queryClient = useQueryClient();
-  const [title, setTitle] = useState("");
-  const [subtitle, setSubtitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [buttonText, setButtonText] = useState("");
-  const [buttonLink, setButtonLink] = useState("");
   const [isActive, setIsActive] = useState(true);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -53,19 +43,9 @@ export function HeroSlideDialog({
 
   useEffect(() => {
     if (slide) {
-      setTitle(slide.title);
-      setSubtitle(slide.subtitle || "");
-      setDescription(slide.description || "");
-      setButtonText(slide.button_text || "");
-      setButtonLink(slide.button_link || "");
       setIsActive(slide.is_active);
       setImagePreview(slide.image_url);
     } else {
-      setTitle("");
-      setSubtitle("");
-      setDescription("");
-      setButtonText("");
-      setButtonLink("");
       setIsActive(true);
       setImagePreview(null);
     }
@@ -108,12 +88,7 @@ export function HeroSlideDialog({
       }
 
       const slideData = {
-        title,
-        subtitle: subtitle || null,
-        description: description || null,
         image_url: imageUrl,
-        button_text: buttonText || null,
-        button_link: buttonLink || null,
         is_active: isActive,
         display_order: slide?.display_order ?? nextOrder,
       };
@@ -187,58 +162,6 @@ export function HeroSlideDialog({
             )}
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="title">Title *</Label>
-            <Input
-              id="title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="Enter slide title"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="subtitle">Subtitle</Label>
-            <Input
-              id="subtitle"
-              value={subtitle}
-              onChange={(e) => setSubtitle(e.target.value)}
-              placeholder="Enter subtitle (optional)"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="description">Description</Label>
-            <Textarea
-              id="description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder="Enter description (optional)"
-              rows={3}
-            />
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="buttonText">Button Text</Label>
-              <Input
-                id="buttonText"
-                value={buttonText}
-                onChange={(e) => setButtonText(e.target.value)}
-                placeholder="e.g., Shop Now"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="buttonLink">Button Link</Label>
-              <Input
-                id="buttonLink"
-                value={buttonLink}
-                onChange={(e) => setButtonLink(e.target.value)}
-                placeholder="e.g., /shop"
-              />
-            </div>
-          </div>
-
           <div className="flex items-center justify-between">
             <Label htmlFor="isActive">Active</Label>
             <Switch
@@ -254,7 +177,7 @@ export function HeroSlideDialog({
             </Button>
             <Button
               onClick={() => saveMutation.mutate()}
-              disabled={!title || uploading || (!imagePreview && !imageFile)}
+              disabled={uploading || (!imagePreview && !imageFile)}
             >
               {uploading ? "Saving..." : slide ? "Update" : "Create"}
             </Button>

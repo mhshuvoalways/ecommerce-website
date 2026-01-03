@@ -16,12 +16,7 @@ import { useRef } from "react";
 
 interface HeroSlide {
   id: string;
-  title: string;
-  subtitle: string | null;
-  description: string | null;
   image_url: string;
-  button_text: string | null;
-  button_link: string | null;
 }
 
 const DefaultHero = () => (
@@ -185,7 +180,7 @@ const Hero = () => {
               <div className="relative min-h-[500px] md:min-h-[600px] w-full overflow-hidden">
                 <img
                   src={slide.image_url}
-                  alt={slide.title}
+                  alt="Hero slide"
                   className="absolute inset-0 w-full h-full object-cover"
                 />
               </div>
