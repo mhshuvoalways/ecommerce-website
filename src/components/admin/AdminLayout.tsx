@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { LayoutDashboard, Package, FolderKanban, ShoppingCart, Menu, Settings } from "lucide-react";
+import { LayoutDashboard, Package, FolderKanban, ShoppingCart, Menu, Settings, Images } from "lucide-react";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
 import {
   Sidebar,
@@ -20,6 +20,7 @@ const adminNavItems = [
   { title: "Products", url: "/admin/products", icon: Package },
   { title: "Categories", url: "/admin/categories", icon: FolderKanban },
   { title: "Orders", url: "/admin/orders", icon: ShoppingCart },
+  { title: "Hero Slides", url: "/admin/hero-slides", icon: Images },
   { title: "Settings", url: "/admin/settings", icon: Settings },
 ];
 
