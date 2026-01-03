@@ -12,12 +12,7 @@ import { HeroSlideDialog } from "@/components/admin/HeroSlideDialog";
 
 interface HeroSlide {
   id: string;
-  title: string;
-  subtitle: string | null;
-  description: string | null;
   image_url: string;
-  button_text: string | null;
-  button_link: string | null;
   display_order: number;
   is_active: boolean;
   created_at: string;
@@ -123,9 +118,7 @@ const HeroSlides = () => {
                 <TableHeader>
                   <TableRow>
                     <TableHead className="w-16">Order</TableHead>
-                    <TableHead className="w-24">Image</TableHead>
-                    <TableHead>Title</TableHead>
-                    <TableHead>Subtitle</TableHead>
+                    <TableHead>Image</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead className="text-right">Actions</TableHead>
                   </TableRow>
@@ -158,12 +151,10 @@ const HeroSlides = () => {
                       <TableCell>
                         <img
                           src={slide.image_url}
-                          alt={slide.title}
+                          alt="Hero slide"
                           className="h-12 w-20 object-cover rounded"
                         />
                       </TableCell>
-                      <TableCell className="font-medium">{slide.title}</TableCell>
-                      <TableCell>{slide.subtitle || "-"}</TableCell>
                       <TableCell>
                         <Badge variant={slide.is_active ? "default" : "secondary"}>
                           {slide.is_active ? "Active" : "Inactive"}
