@@ -1,6 +1,3 @@
-import { Link, useLocation } from "react-router-dom";
-import { LayoutDashboard, Package, FolderKanban, ShoppingCart, Menu, Settings, Images } from "lucide-react";
-import { useAdminAuth } from "@/hooks/useAdminAuth";
 import {
   Sidebar,
   SidebarContent,
@@ -14,13 +11,24 @@ import {
   SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { useAdminAuth } from "@/hooks/useAdminAuth";
+import {
+  FolderKanban,
+  Images,
+  LayoutDashboard,
+  Menu,
+  Package,
+  Settings,
+  ShoppingCart,
+} from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
 
 const adminNavItems = [
   { title: "Overview", url: "/admin", icon: LayoutDashboard },
   { title: "Products", url: "/admin/products", icon: Package },
   { title: "Categories", url: "/admin/categories", icon: FolderKanban },
   { title: "Orders", url: "/admin/orders", icon: ShoppingCart },
-  { title: "Hero Slides", url: "/admin/hero-slides", icon: Images },
+  { title: "Slides", url: "/admin/hero-slides", icon: Images },
   { title: "Settings", url: "/admin/settings", icon: Settings },
 ];
 
@@ -42,7 +50,11 @@ function AdminSidebar() {
                     <SidebarMenuButton asChild isActive={isActive}>
                       <Link
                         to={item.url}
-                        className={isActive ? "bg-accent text-accent-foreground hover:bg-accent hover:text-accent-foreground" : ""}
+                        className={
+                          isActive
+                            ? "bg-accent text-accent-foreground hover:bg-accent hover:text-accent-foreground"
+                            : ""
+                        }
                       >
                         <item.icon className="h-4 w-4" />
                         {open && <span>{item.title}</span>}
@@ -67,7 +79,9 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-          <p className="mt-4 text-muted-foreground">Verifying admin access...</p>
+          <p className="mt-4 text-muted-foreground">
+            Verifying admin access...
+          </p>
         </div>
       </div>
     );
@@ -86,7 +100,9 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
             <SidebarTrigger>
               <Menu className="h-5 w-5" />
             </SidebarTrigger>
-            <h1 className="ml-3 md:ml-4 text-base md:text-lg font-semibold truncate">Admin Dashboard</h1>
+            <h1 className="ml-3 md:ml-4 text-base md:text-lg font-semibold truncate">
+              Admin Dashboard
+            </h1>
           </header>
           <div className="p-3 md:p-6">{children}</div>
         </main>

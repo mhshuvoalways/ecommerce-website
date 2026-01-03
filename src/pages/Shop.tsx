@@ -10,10 +10,6 @@ import { SlidersHorizontal } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
-import product1 from "@/assets/product-1.jpg";
-
-const placeholderImages = [product1];
-
 const Shop = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   
@@ -63,7 +59,7 @@ const Shop = () => {
       if (error) throw error;
       return data.map((product, index) => ({
         id: product.id,
-        image: product.image_url || placeholderImages[index % placeholderImages.length],
+        image: product.image_url,
         name: product.name,
         price: Number(product.price),
         categoryName: product.categories?.name || "uncategorized",

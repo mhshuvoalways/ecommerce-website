@@ -1,22 +1,21 @@
-import { useParams, Link } from "react-router-dom";
-import { useCart } from "@/contexts/CartContext";
-import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { Button } from "@/components/ui/button";
-import { ShoppingCart, ArrowLeft } from "lucide-react";
-import { toast } from "@/hooks/use-toast";
+import Header from "@/components/Header";
 import { ProductReviews } from "@/components/ProductReviews";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import product1 from "@/assets/product-1.jpg";
+import { Button } from "@/components/ui/button";
+import { useCart } from "@/contexts/CartContext";
+import { toast } from "@/hooks/use-toast";
 import { useCurrencySymbol } from "@/hooks/useCurrencySymbol";
+import { supabase } from "@/integrations/supabase/client";
+import { useQuery } from "@tanstack/react-query";
 import DOMPurify from "dompurify";
+import { ArrowLeft, ShoppingCart } from "lucide-react";
+import { Link, useParams } from "react-router-dom";
 
 const ProductDetails = () => {
   const { id } = useParams();
   const { addToCart } = useCart();
   const currencySymbol = useCurrencySymbol();
-  
+
   const { data: product, isLoading } = useQuery({
     queryKey: ["product", id],
     queryFn: async () => {
@@ -32,7 +31,7 @@ const ProductDetails = () => {
         description: data.description,
         price: Number(data.price),
         category: data.categories?.name || "Uncategorized",
-        image: data.image_url || product1,
+        image: data.image_url,
         stock: data.stock,
       };
     },
@@ -114,15 +113,18 @@ const ProductDetails = () => {
                 </h1>
               </div>
 
-              <p className="text-3xl font-bold">{currencySymbol}{product.price}</p>
+              <p className="text-3xl font-bold">
+                {currencySymbol}
+                {product.price}
+              </p>
 
               {product.description && (
                 <div>
                   <h3 className="mb-2 font-semibold">Description</h3>
-                  <div 
+                  <div
                     className="text-muted-foreground prose prose-sm max-w-none [&_h1]:text-2xl [&_h2]:text-xl [&_h3]:text-lg [&_ul]:list-disc [&_ul]:ml-4 [&_ol]:list-decimal [&_ol]:ml-4"
-                    dangerouslySetInnerHTML={{ 
-                      __html: DOMPurify.sanitize(product.description) 
+                    dangerouslySetInnerHTML={{
+                      __html: DOMPurify.sanitize(product.description),
                     }}
                   />
                 </div>
