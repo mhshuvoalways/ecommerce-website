@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import Logo from "@/assets/logo.png";
 
 const Footer = () => {
   return (
@@ -6,7 +7,9 @@ const Footer = () => {
       <div className="container mx-auto px-4 py-12 md:px-6">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
           <div className="space-y-4">
-            <h3 className="text-lg font-bold">KinboMart</h3>
+            <Link to="/">
+              <img src={Logo} alt="KinboMart" className="w-12" />
+            </Link>
             <p className="text-sm text-muted-foreground">
               Smart Shopping Starts Here
             </p>
