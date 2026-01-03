@@ -164,7 +164,7 @@ const Cart = () => {
                         name: e.target.value,
                       })
                     }
-                    placeholder="John Doe"
+                    placeholder="রহিম উদ্দিন"
                   />
                 </div>
                 <div className="grid gap-2">
@@ -178,7 +178,7 @@ const Cart = () => {
                         phone: e.target.value,
                       })
                     }
-                    placeholder="+1 (555) 000-0000"
+                    placeholder="+880 1712-345678"
                   />
                 </div>
                 <div className="grid gap-2">
