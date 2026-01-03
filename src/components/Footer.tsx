@@ -8,7 +8,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
           <div className="space-y-4">
             <Link to="/">
-              <img src={Logo} alt="KinboMart" className="w-12 py-2" />
+              <img src={Logo} alt="KinboMart" className="w-12" />
             </Link>
             <p className="text-sm text-muted-foreground">
               Smart Shopping Starts Here
